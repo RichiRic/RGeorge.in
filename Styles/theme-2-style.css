@@ -105,6 +105,10 @@ body a {
 	line-height: 2rem;
 }
 
+.btn-svg {
+	min-width: 20px !important;
+}
+
 
 /*Theme CSS*/
 html,

@@ -2,215 +2,215 @@
 
 (function() {
 	var on = addEventListener,
-		$ = function(q) {
-			return document.querySelector(q)
+	$ = function(q) {
+		return document.querySelector(q)
+	},
+	$$ = function(q) {
+		return document.querySelectorAll(q)
+	},
+	$body = document.body,
+	$inner = $('.inner'),
+	client = (function() {
+		var o = {
+			browser: 'other',
+			browserVersion: 0,
+			os: 'other',
+			osVersion: 0,
+			mobile: false,
+			canUse: null,
+			flags: {
+				lsdUnits: false,
+			},
 		},
-		$$ = function(q) {
-			return document.querySelectorAll(q)
-		},
-		$body = document.body,
-		$inner = $('.inner'),
-		client = (function() {
-			var o = {
-					browser: 'other',
-					browserVersion: 0,
-					os: 'other',
-					osVersion: 0,
-					mobile: false,
-					canUse: null,
-					flags: {
-						lsdUnits: false,
-					},
-				},
-				ua = navigator.userAgent,
-				a, i;
-			a = [
-				['firefox', /Firefox\/([0-9\.]+)/],
-				['edge', /Edge\/([0-9\.]+)/],
-				['safari', /Version\/([0-9\.]+).+Safari/],
-				['chrome', /Chrome\/([0-9\.]+)/],
-				['chrome', /CriOS\/([0-9\.]+)/],
-				['ie', /Trident\/.+rv:([0-9]+)/]
+		ua = navigator.userAgent,
+		a, i;
+		a = [
+			['firefox', /Firefox\/([0-9\.]+)/],
+			['edge', /Edge\/([0-9\.]+)/],
+			['safari', /Version\/([0-9\.]+).+Safari/],
+			['chrome', /Chrome\/([0-9\.]+)/],
+			['chrome', /CriOS\/([0-9\.]+)/],
+			['ie', /Trident\/.+rv:([0-9]+)/]
 			];
-			for (i = 0; i < a.length; i++) {
-				if (ua.match(a[i][1])) {
-					o.browser = a[i][0];
-					o.browserVersion = parseFloat(RegExp.$1);
-					break;
-				}
+		for (i = 0; i < a.length; i++) {
+			if (ua.match(a[i][1])) {
+				o.browser = a[i][0];
+				o.browserVersion = parseFloat(RegExp.$1);
+				break;
 			}
-			a = [
-				['ios', /([0-9_]+) like Mac OS X/, function(v) {
-					return v.replace('_', '.').replace('_', '');
-				}],
-				['ios', /CPU like Mac OS X/, function(v) {
-					return 0
-				}],
-				['ios', /iPad; CPU/, function(v) {
-					return 0
-				}],
-				['android', /Android ([0-9\.]+)/, null],
-				['mac', /Macintosh.+Mac OS X ([0-9_]+)/, function(v) {
-					return v.replace('_', '.').replace('_', '');
-				}],
-				['windows', /Windows NT ([0-9\.]+)/, null],
-				['undefined', /Undefined/, null],
+		}
+		a = [
+			['ios', /([0-9_]+) like Mac OS X/, function(v) {
+				return v.replace('_', '.').replace('_', '');
+			}],
+			['ios', /CPU like Mac OS X/, function(v) {
+				return 0
+			}],
+			['ios', /iPad; CPU/, function(v) {
+				return 0
+			}],
+			['android', /Android ([0-9\.]+)/, null],
+			['mac', /Macintosh.+Mac OS X ([0-9_]+)/, function(v) {
+				return v.replace('_', '.').replace('_', '');
+			}],
+			['windows', /Windows NT ([0-9\.]+)/, null],
+			['undefined', /Undefined/, null],
 			];
-			for (i = 0; i < a.length; i++) {
-				if (ua.match(a[i][1])) {
-					o.os = a[i][0];
-					o.osVersion = parseFloat(a[i][2] ? (a[i][2])(RegExp.$1) : RegExp.$1);
-					break;
-				}
+		for (i = 0; i < a.length; i++) {
+			if (ua.match(a[i][1])) {
+				o.os = a[i][0];
+				o.osVersion = parseFloat(a[i][2] ? (a[i][2])(RegExp.$1) : RegExp.$1);
+				break;
 			}
-			if (o.os == 'mac' && ('ontouchstart' in window) && ((screen.width == 1024 && screen.height == 1366) || (screen.width == 834 && screen.height == 1112) || (screen.width == 810 && screen.height == 1080) || (screen.width == 768 && screen.height == 1024))) o.os = 'ios';
-			o.mobile = (o.os == 'android' || o.os == 'ios');
-			var _canUse = document.createElement('div');
-			o.canUse = function(property, value) {
-				var style;
-				style = _canUse.style;
-				if (!(property in style)) return false;
-				if (typeof value !== 'undefined') {
-					style[property] = value;
-					if (style[property] == '') return false;
-				}
-				return true;
-			};
-			o.flags.lsdUnits = o.canUse('width', '100dvw');
-			return o;
-		}()),
-		trigger = function(t) {
-			dispatchEvent(new Event(t));
-		},
-		cssRules = function(selectorText) {
-			var ss = document.styleSheets,
-				a = [],
-				f = function(s) {
-					var r = s.cssRules,
-						i;
-					for (i = 0; i < r.length; i++) {
-						if (r[i] instanceof CSSMediaRule && matchMedia(r[i].conditionText).matches)(f)(r[i]);
-						else if (r[i] instanceof CSSStyleRule && r[i].selectorText == selectorText) a.push(r[i]);
-					}
-				},
-				x, i;
-			for (i = 0; i < ss.length; i++) f(ss[i]);
-			return a;
-		},
-		thisHash = function() {
-			var h = location.hash ? location.hash.substring(1) : null,
-				a;
-			if (!h) return null;
-			if (h.match(/\?/)) {
-				a = h.split('?');
-				h = a[0];
-				history.replaceState(undefined, undefined, '#' + h);
-				window.location.search = a[1];
+		}
+		if (o.os == 'mac' && ('ontouchstart' in window) && ((screen.width == 1024 && screen.height == 1366) || (screen.width == 834 && screen.height == 1112) || (screen.width == 810 && screen.height == 1080) || (screen.width == 768 && screen.height == 1024))) o.os = 'ios';
+		o.mobile = (o.os == 'android' || o.os == 'ios');
+		var _canUse = document.createElement('div');
+		o.canUse = function(property, value) {
+			var style;
+			style = _canUse.style;
+			if (!(property in style)) return false;
+			if (typeof value !== 'undefined') {
+				style[property] = value;
+				if (style[property] == '') return false;
 			}
-			if (h.length > 0 && !h.match(/^[a-zA-Z]/)) h = 'x' + h;
-			if (typeof h == 'string') h = h.toLowerCase();
-			return h;
-		},
-		scrollToElement = function(e, style, duration) {
-			var y, cy, dy, start, easing, offset, f;
-			if (!e) y = 0;
-			else {
-				offset = (e.dataset.scrollOffset ? parseInt(e.dataset.scrollOffset) : 0) * parseFloat(getComputedStyle(document.documentElement).fontSize);
-				switch (e.dataset.scrollBehavior ? e.dataset.scrollBehavior : 'default') {
-					case 'default':
-					default:
-						y = e.offsetTop + offset;
-						break;
-					case 'center':
-						if (e.offsetHeight < window.innerHeight) y = e.offsetTop - ((window.innerHeight - e.offsetHeight) / 2) + offset;
-						else y = e.offsetTop - offset;
-						break;
-					case 'previous':
-						if (e.previousElementSibling) y = e.previousElementSibling.offsetTop + e.previousElementSibling.offsetHeight + offset;
-						else y = e.offsetTop + offset;
-						break;
-				}
-			}
-			if (!style) style = 'smooth';
-			if (!duration) duration = 750;
-			if (style == 'instant') {
-				window.scrollTo(0, y);
-				return;
-			}
-			start = Date.now();
-			cy = window.scrollY;
-			dy = y - cy;
-			switch (style) {
-				case 'linear':
-					easing = function(t) {
-						return t
-					};
-					break;
-				case 'smooth':
-					easing = function(t) {
-						return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-					};
-					break;
-			}
-			f = function() {
-				var t = Date.now() - start;
-				if (t >= duration) window.scroll(0, y);
-				else {
-					window.scroll(0, cy + (dy * easing(t / duration)));
-					requestAnimationFrame(f);
-				}
-			};
-			f();
-		},
-		scrollToTop = function() {
-			scrollToElement(null);
-		},
-		loadElements = function(parent) {
-			var a, e, x, i;
-			a = parent.querySelectorAll('iframe[data-src]:not([data-src=""])');
-			for (i = 0; i < a.length; i++) {
-				a[i].contentWindow.location.replace(a[i].dataset.src);
-				a[i].dataset.initialSrc = a[i].dataset.src;
-				a[i].dataset.src = '';
-			}
-			a = parent.querySelectorAll('video[autoplay]');
-			for (i = 0; i < a.length; i++) {
-				if (a[i].paused) a[i].play();
-			}
-			e = parent.querySelector('[data-autofocus="1"]');
-			x = e ? e.tagName : null;
-			switch (x) {
-				case 'FORM':
-					e = e.querySelector('.field input, .field select, .field textarea');
-					if (e) e.focus();
-					break;
-				default:
-					break;
-			}
-		},
-		unloadElements = function(parent) {
-			var a, e, x, i;
-			a = parent.querySelectorAll('iframe[data-src=""]');
-			for (i = 0; i < a.length; i++) {
-				if (a[i].dataset.srcUnload === '0') continue;
-				if ('initialSrc' in a[i].dataset) a[i].dataset.src = a[i].dataset.initialSrc;
-				else a[i].dataset.src = a[i].src;
-				a[i].contentWindow.location.replace('about:blank');
-			}
-			a = parent.querySelectorAll('video');
-			for (i = 0; i < a.length; i++) {
-				if (!a[i].paused) a[i].pause();
-			}
-			e = $(':focus');
-			if (e) e.blur();
+			return true;
 		};
+		o.flags.lsdUnits = o.canUse('width', '100dvw');
+		return o;
+	}()),
+	trigger = function(t) {
+		dispatchEvent(new Event(t));
+	},
+	cssRules = function(selectorText) {
+		var ss = document.styleSheets,
+		a = [],
+		f = function(s) {
+			var r = s.cssRules,
+			i;
+			for (i = 0; i < r.length; i++) {
+				if (r[i] instanceof CSSMediaRule && matchMedia(r[i].conditionText).matches)(f)(r[i]);
+				else if (r[i] instanceof CSSStyleRule && r[i].selectorText == selectorText) a.push(r[i]);
+			}
+		},
+		x, i;
+		for (i = 0; i < ss.length; i++) f(ss[i]);
+			return a;
+	},
+	thisHash = function() {
+		var h = location.hash ? location.hash.substring(1) : null,
+		a;
+		if (!h) return null;
+		if (h.match(/\?/)) {
+			a = h.split('?');
+			h = a[0];
+			history.replaceState(undefined, undefined, '#' + h);
+			window.location.search = a[1];
+		}
+		if (h.length > 0 && !h.match(/^[a-zA-Z]/)) h = 'x' + h;
+		if (typeof h == 'string') h = h.toLowerCase();
+		return h;
+	},
+	scrollToElement = function(e, style, duration) {
+		var y, cy, dy, start, easing, offset, f;
+		if (!e) y = 0;
+		else {
+			offset = (e.dataset.scrollOffset ? parseInt(e.dataset.scrollOffset) : 0) * parseFloat(getComputedStyle(document.documentElement).fontSize);
+			switch (e.dataset.scrollBehavior ? e.dataset.scrollBehavior : 'default') {
+			case 'default':
+			default:
+				y = e.offsetTop + offset;
+				break;
+			case 'center':
+				if (e.offsetHeight < window.innerHeight) y = e.offsetTop - ((window.innerHeight - e.offsetHeight) / 2) + offset;
+				else y = e.offsetTop - offset;
+				break;
+			case 'previous':
+				if (e.previousElementSibling) y = e.previousElementSibling.offsetTop + e.previousElementSibling.offsetHeight + offset;
+				else y = e.offsetTop + offset;
+				break;
+			}
+		}
+		if (!style) style = 'smooth';
+		if (!duration) duration = 750;
+		if (style == 'instant') {
+			window.scrollTo(0, y);
+			return;
+		}
+		start = Date.now();
+		cy = window.scrollY;
+		dy = y - cy;
+		switch (style) {
+		case 'linear':
+			easing = function(t) {
+				return t
+			};
+			break;
+		case 'smooth':
+			easing = function(t) {
+				return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
+			};
+			break;
+		}
+		f = function() {
+			var t = Date.now() - start;
+			if (t >= duration) window.scroll(0, y);
+			else {
+				window.scroll(0, cy + (dy * easing(t / duration)));
+				requestAnimationFrame(f);
+			}
+		};
+		f();
+	},
+	scrollToTop = function() {
+		scrollToElement(null);
+	},
+	loadElements = function(parent) {
+		var a, e, x, i;
+		a = parent.querySelectorAll('iframe[data-src]:not([data-src=""])');
+		for (i = 0; i < a.length; i++) {
+			a[i].contentWindow.location.replace(a[i].dataset.src);
+			a[i].dataset.initialSrc = a[i].dataset.src;
+			a[i].dataset.src = '';
+		}
+		a = parent.querySelectorAll('video[autoplay]');
+		for (i = 0; i < a.length; i++) {
+			if (a[i].paused) a[i].play();
+		}
+		e = parent.querySelector('[data-autofocus="1"]');
+		x = e ? e.tagName : null;
+		switch (x) {
+		case 'FORM':
+			e = e.querySelector('.field input, .field select, .field textarea');
+			if (e) e.focus();
+			break;
+		default:
+			break;
+		}
+	},
+	unloadElements = function(parent) {
+		var a, e, x, i;
+		a = parent.querySelectorAll('iframe[data-src=""]');
+		for (i = 0; i < a.length; i++) {
+			if (a[i].dataset.srcUnload === '0') continue;
+			if ('initialSrc' in a[i].dataset) a[i].dataset.src = a[i].dataset.initialSrc;
+			else a[i].dataset.src = a[i].src;
+			a[i].contentWindow.location.replace('about:blank');
+		}
+		a = parent.querySelectorAll('video');
+		for (i = 0; i < a.length; i++) {
+			if (!a[i].paused) a[i].pause();
+		}
+		e = $(':focus');
+		if (e) e.blur();
+	};
 	window._scrollToTop = scrollToTop;
 	var thisURL = function() {
 		return window.location.href.replace(window.location.search, '').replace(/#$/, '');
 	};
 	var getVar = function(name) {
 		var a = window.location.search.substring(1).split('&'),
-			b, k;
+		b, k;
 		for (k in a) {
 			b = a[k].split('=');
 			if (b[0] == name) return b[1];
@@ -341,21 +341,21 @@
 					item.initialState = null;
 				} else {
 					switch (item.mode) {
-						case 1:
-						default:
-							state = (bottom > (elementTop - item.offset) && top < (elementBottom + item.offset));
-							break;
-						case 2:
-							a = (top + (height * 0.5));
-							state = (a > (elementTop - item.offset) && a < (elementBottom + item.offset));
-							break;
-						case 3:
-							a = top + (height * 0.25);
-							if (a - (height * 0.375) <= 0) a = 0;
-							b = top + (height * 0.75);
-							if (b + (height * 0.375) >= document.body.scrollHeight - scrollPad) b = document.body.scrollHeight + scrollPad;
-							state = (b > (elementTop - item.offset) && a < (elementBottom + item.offset));
-							break;
+					case 1:
+					default:
+						state = (bottom > (elementTop - item.offset) && top < (elementBottom + item.offset));
+						break;
+					case 2:
+						a = (top + (height * 0.5));
+						state = (a > (elementTop - item.offset) && a < (elementBottom + item.offset));
+						break;
+					case 3:
+						a = top + (height * 0.25);
+						if (a - (height * 0.375) <= 0) a = 0;
+						b = top + (height * 0.75);
+						if (b + (height * 0.375) >= document.body.scrollHeight - scrollPad) b = document.body.scrollHeight + scrollPad;
+						state = (b > (elementTop - item.offset) && a < (elementBottom + item.offset));
+						break;
 					}
 				}
 				if (state != item.state) {
@@ -384,10 +384,10 @@
 	scrollEvents.init();
 	(function() {
 		var items = $$('.deferred'),
-			loadHandler, enterHandler;
+		loadHandler, enterHandler;
 		loadHandler = function() {
 			var i = this,
-				p = this.parentElement;
+			p = this.parentElement;
 			if (i.dataset.src !== 'done') return;
 			if (Date.now() - i._startLoad < 375) {
 				p.classList.remove('loading');
@@ -405,8 +405,8 @@
 		};
 		enterHandler = function() {
 			var i = this,
-				p = this.parentElement,
-				src;
+			p = this.parentElement,
+			src;
 			src = i.dataset.src;
 			i.dataset.src = 'done';
 			p.classList.add('loading');
@@ -437,11 +437,39 @@
 //Dark Mode Toggle Button
 const btn = document.querySelector(".btn-toggle");
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+const SVG_XLINK = "http://www.w3.org/1999/xlink";
 
 btn.addEventListener("click", function () {
-  if (prefersDarkScheme.matches) {
-    document.body.classList.toggle("light-theme");
-  } else {
-    document.body.classList.toggle("dark-theme");
-  }
+	
+	//Change Theme
+	if (prefersDarkScheme.matches) {
+		document.body.classList.toggle("light-theme");
+	} else {
+		document.body.classList.toggle("dark-theme");
+	}
+
+	//Change Button Text
+	var btnlbl = document.getElementById("modebtn-lbl");
+	var btnsvg = document.getElementById("modebtn-svg");
+
+
+
+	console.log(btnsvg);
+
+	if (btnlbl.textContent == "dark mode") {
+		btnlbl.textContent = "light mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun2');
+	}
+	else {
+		btnlbl.textContent = "dark mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-moon');
+	}
+
 });
+
+
+
+
+
+
+
