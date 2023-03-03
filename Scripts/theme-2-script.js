@@ -441,24 +441,22 @@ const SVG_XLINK = "http://www.w3.org/1999/xlink";
 
 btn.addEventListener("click", function () {
 	
-	//Change Theme
+	//Change Website's Theme
 	if (prefersDarkScheme.matches) {
 		document.body.classList.toggle("light-theme");
 	} else {
 		document.body.classList.toggle("dark-theme");
 	}
 
-	//Change Button Text
+	//Change Button's Text
 	var btnlbl = document.getElementById("modebtn-lbl");
 	var btnsvg = document.getElementById("modebtn-svg");
 
 
-
-	console.log(btnsvg);
-
+	//Change Button's SVG
 	if (btnlbl.textContent == "dark mode") {
 		btnlbl.textContent = "light mode";
-		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun2');
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
 	}
 	else {
 		btnlbl.textContent = "dark mode";
