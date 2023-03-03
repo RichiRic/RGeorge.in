@@ -434,11 +434,17 @@
 })();
 
 
-//Dark Mode Toggle Button
+//DARK MODE FUNCTIONALITY//
+
+//Variables//
 const btn = document.querySelector(".btn-toggle");
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const SVG_XLINK = "http://www.w3.org/1999/xlink";
+let btnlbl = document.getElementById("modebtn-lbl");
+let btnsvg = document.getElementById("modebtn-svg");
 
+
+//Dark Mode Toggle Button//
 btn.addEventListener("click", function () {
 	
 	//Change Website's Theme
@@ -448,12 +454,7 @@ btn.addEventListener("click", function () {
 		document.body.classList.toggle("dark-theme");
 	}
 
-	//Change Button's Text
-	var btnlbl = document.getElementById("modebtn-lbl");
-	var btnsvg = document.getElementById("modebtn-svg");
-
-
-	//Change Button's SVG
+	//Change Button
 	if (btnlbl.textContent == "dark mode") {
 		btnlbl.textContent = "light mode";
 		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
@@ -465,6 +466,24 @@ btn.addEventListener("click", function () {
 
 });
 
+//Detect OS Level Dark Mode Changes//
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
+	const colorScheme = e.matches ? "dark" : "light";
+	console.log(colorScheme);
+
+	let btnlbl = document.getElementById("modebtn-lbl");
+	let btnsvg = document.getElementById("modebtn-svg");
+
+	if (colorScheme === "dark") {
+		document.body.classList.toggle("dark-theme");
+		btnlbl.textContent = "light mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
+	} else if (colorScheme === "light")  {
+		document.body.classList.toggle("light-theme");
+		btnlbl.textContent = "dark mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-moon');
+	}
+});
 
 
 
