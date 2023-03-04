@@ -1,5 +1,19 @@
-//Theme's Default JS
+//Check Current OS Theme and Implement Changes
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
+$(document).ready(function () {
+  console.log("Hello World!");
+  if (prefersDarkScheme.matches) {
+		btnlbl.textContent = "light mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
+	} else {
+		btnlbl.textContent = "dark mode";
+		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-moon');
+	}
+});
+
+
+//Theme's Default JS//
 (function() {
 	var on = addEventListener,
 	$ = function(q) {
@@ -438,7 +452,6 @@
 
 //Variables//
 const btn = document.querySelector(".btn-toggle");
-const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const SVG_XLINK = "http://www.w3.org/1999/xlink";
 let btnlbl = document.getElementById("modebtn-lbl");
 let btnsvg = document.getElementById("modebtn-svg");
@@ -446,7 +459,7 @@ let btnsvg = document.getElementById("modebtn-svg");
 
 //Dark Mode Toggle Button//
 btn.addEventListener("click", function () {
-	
+
 	//Change Website's Theme
 	if (prefersDarkScheme.matches) {
 		document.body.classList.toggle("light-theme");
@@ -466,13 +479,10 @@ btn.addEventListener("click", function () {
 
 });
 
-//Detect OS Level Dark Mode Changes//
+
+//Detect OS Level Dark Mode Changes and change button//
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function (e) {
 	const colorScheme = e.matches ? "dark" : "light";
-	console.log(colorScheme);
-
-	let btnlbl = document.getElementById("modebtn-lbl");
-	let btnsvg = document.getElementById("modebtn-svg");
 
 	if (colorScheme === "dark") {
 		document.body.classList.toggle("dark-theme");
