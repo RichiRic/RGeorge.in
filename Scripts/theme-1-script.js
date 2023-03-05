@@ -1,25 +1,25 @@
-(function() {
+(function () {
 	var on = addEventListener,
-		$ = function(q) {
+		$ = function (q) {
 			return document.querySelector(q)
 		},
-		$$ = function(q) {
+		$$ = function (q) {
 			return document.querySelectorAll(q)
 		},
 		$body = document.body,
 		$inner = $('.inner'),
-		client = (function() {
+		client = (function () {
 			var o = {
-					browser: 'other',
-					browserVersion: 0,
-					os: 'other',
-					osVersion: 0,
-					mobile: false,
-					canUse: null,
-					flags: {
-						lsdUnits: false,
-					},
+				browser: 'other',
+				browserVersion: 0,
+				os: 'other',
+				osVersion: 0,
+				mobile: false,
+				canUse: null,
+				flags: {
+					lsdUnits: false,
 				},
+			},
 				ua = navigator.userAgent,
 				a, i;
 			a = [
@@ -38,17 +38,17 @@
 				}
 			}
 			a = [
-				['ios', /([0-9_]+) like Mac OS X/, function(v) {
+				['ios', /([0-9_]+) like Mac OS X/, function (v) {
 					return v.replace('_', '.').replace('_', '');
 				}],
-				['ios', /CPU like Mac OS X/, function(v) {
+				['ios', /CPU like Mac OS X/, function (v) {
 					return 0
 				}],
-				['ios', /iPad; CPU/, function(v) {
+				['ios', /iPad; CPU/, function (v) {
 					return 0
 				}],
 				['android', /Android ([0-9\.]+)/, null],
-				['mac', /Macintosh.+Mac OS X ([0-9_]+)/, function(v) {
+				['mac', /Macintosh.+Mac OS X ([0-9_]+)/, function (v) {
 					return v.replace('_', '.').replace('_', '');
 				}],
 				['windows', /Windows NT ([0-9\.]+)/, null],
@@ -64,7 +64,7 @@
 			if (o.os == 'mac' && ('ontouchstart' in window) && ((screen.width == 1024 && screen.height == 1366) || (screen.width == 834 && screen.height == 1112) || (screen.width == 810 && screen.height == 1080) || (screen.width == 768 && screen.height == 1024))) o.os = 'ios';
 			o.mobile = (o.os == 'android' || o.os == 'ios');
 			var _canUse = document.createElement('div');
-			o.canUse = function(property, value) {
+			o.canUse = function (property, value) {
 				var style;
 				style = _canUse.style;
 				if (!(property in style)) return false;
@@ -77,17 +77,17 @@
 			o.flags.lsdUnits = o.canUse('width', '100dvw');
 			return o;
 		}()),
-		trigger = function(t) {
+		trigger = function (t) {
 			dispatchEvent(new Event(t));
 		},
-		cssRules = function(selectorText) {
+		cssRules = function (selectorText) {
 			var ss = document.styleSheets,
 				a = [],
-				f = function(s) {
+				f = function (s) {
 					var r = s.cssRules,
 						i;
 					for (i = 0; i < r.length; i++) {
-						if (r[i] instanceof CSSMediaRule && matchMedia(r[i].conditionText).matches)(f)(r[i]);
+						if (r[i] instanceof CSSMediaRule && matchMedia(r[i].conditionText).matches) (f)(r[i]);
 						else if (r[i] instanceof CSSStyleRule && r[i].selectorText == selectorText) a.push(r[i]);
 					}
 				},
@@ -95,7 +95,7 @@
 			for (i = 0; i < ss.length; i++) f(ss[i]);
 			return a;
 		},
-		thisHash = function() {
+		thisHash = function () {
 			var h = location.hash ? location.hash.substring(1) : null,
 				a;
 			if (!h) return null;
@@ -109,7 +109,7 @@
 			if (typeof h == 'string') h = h.toLowerCase();
 			return h;
 		},
-		scrollToElement = function(e, style, duration) {
+		scrollToElement = function (e, style, duration) {
 			var y, cy, dy, start, easing, offset, f;
 			if (!e) y = 0;
 			else {
@@ -140,17 +140,17 @@
 			dy = y - cy;
 			switch (style) {
 				case 'linear':
-					easing = function(t) {
+					easing = function (t) {
 						return t
 					};
 					break;
 				case 'smooth':
-					easing = function(t) {
+					easing = function (t) {
 						return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
 					};
 					break;
 			}
-			f = function() {
+			f = function () {
 				var t = Date.now() - start;
 				if (t >= duration) window.scroll(0, y);
 				else {
@@ -160,10 +160,10 @@
 			};
 			f();
 		},
-		scrollToTop = function() {
+		scrollToTop = function () {
 			scrollToElement(null);
 		},
-		loadElements = function(parent) {
+		loadElements = function (parent) {
 			var a, e, x, i;
 			a = parent.querySelectorAll('iframe[data-src]:not([data-src=""])');
 			for (i = 0; i < a.length; i++) {
@@ -186,7 +186,7 @@
 					break;
 			}
 		},
-		unloadElements = function(parent) {
+		unloadElements = function (parent) {
 			var a, e, x, i;
 			a = parent.querySelectorAll('iframe[data-src=""]');
 			for (i = 0; i < a.length; i++) {
@@ -203,10 +203,10 @@
 			if (e) e.blur();
 		};
 	window._scrollToTop = scrollToTop;
-	var thisURL = function() {
+	var thisURL = function () {
 		return window.location.href.replace(window.location.search, '').replace(/#$/, '');
 	};
-	var getVar = function(name) {
+	var getVar = function (name) {
 		var a = window.location.search.substring(1).split('&'),
 			b, k;
 		for (k in a) {
@@ -216,25 +216,25 @@
 		return null;
 	};
 	var errors = {
-		handle: function(handler) {
-			window.onerror = function(message, url, line, column, error) {
+		handle: function (handler) {
+			window.onerror = function (message, url, line, column, error) {
 				(handler)(error.message);
 				return true;
 			};
 		},
-		unhandle: function() {
+		unhandle: function () {
 			window.onerror = null;
 		}
 	};
-	var loaderTimeout = setTimeout(function() {
+	var loaderTimeout = setTimeout(function () {
 		$body.classList.add('with-loader');
 	}, 500);
-	on('load', function() {
-		setTimeout(function() {
+	on('load', function () {
+		setTimeout(function () {
 			clearTimeout(loaderTimeout);
 			$body.classList.remove('is-loading');
 			$body.classList.add('is-playing');
-			setTimeout(function() {
+			setTimeout(function () {
 				$body.classList.remove('with-loader');
 				$body.classList.remove('is-playing');
 				$body.classList.add('is-ready');
@@ -248,18 +248,18 @@
 	document.head.appendChild(style);
 	sheet = style.sheet;
 	if (client.mobile) {
-		(function() {
+		(function () {
 			if (client.flags.lsdUnits) {
 				document.documentElement.style.setProperty('--viewport-height', '100svh');
 				document.documentElement.style.setProperty('--background-height', '100dvh');
 			} else {
-				var f = function() {
+				var f = function () {
 					document.documentElement.style.setProperty('--viewport-height', window.innerHeight + 'px');
 					document.documentElement.style.setProperty('--background-height', (window.innerHeight + 250) + 'px');
 				};
 				on('load', f);
-				on('orientationchange', function() {
-					setTimeout(function() {
+				on('orientationchange', function () {
+					setTimeout(function () {
 						(f)();
 					}, 100);
 				});
@@ -267,10 +267,10 @@
 		})();
 	}
 	if (client.os == 'android') {
-		(function() {
+		(function () {
 			sheet.insertRule('body::after { }', 0);
 			rule = sheet.cssRules[0];
-			var f = function() {
+			var f = function () {
 				rule.style.cssText = 'height: ' + (Math.max(screen.width, screen.height)) + 'px';
 			};
 			on('load', f);
@@ -279,30 +279,30 @@
 		})();
 		$body.classList.add('is-touch');
 	} else if (client.os == 'ios') {
-		if (client.osVersion <= 11)(function() {
+		if (client.osVersion <= 11) (function () {
 			sheet.insertRule('body::after { }', 0);
 			rule = sheet.cssRules[0];
 			rule.style.cssText = '-webkit-transform: scale(1.0)';
 		})();
-		if (client.osVersion <= 11)(function() {
+		if (client.osVersion <= 11) (function () {
 			sheet.insertRule('body.ios-focus-fix::before { }', 0);
 			rule = sheet.cssRules[0];
 			rule.style.cssText = 'height: calc(100% + 60px)';
-			on('focus', function(event) {
+			on('focus', function (event) {
 				$body.classList.add('ios-focus-fix');
 			}, true);
-			on('blur', function(event) {
+			on('blur', function (event) {
 				$body.classList.remove('ios-focus-fix');
 			}, true);
 		})();
 		$body.classList.add('is-touch');
-	}(function() {
+	} (function () {
 		var breakpoints = {
-				small: '(max-width: 736px)',
-				medium: '(max-width: 980px)',
-			},
+			small: '(max-width: 736px)',
+			medium: '(max-width: 980px)',
+		},
 			elements = $$('[data-reorder]');
-		elements.forEach(function(e) {
+		elements.forEach(function (e) {
 			var desktop = [],
 				mobile = [],
 				state = false,
@@ -315,7 +315,7 @@
 			}
 			a = e.dataset.reorder.split(',');
 			for (x of a) mobile.push(desktop[parseInt(x)]);
-			f = function() {
+			f = function () {
 				var order = null,
 					ce;
 				if (window.matchMedia(query).matches) {
@@ -338,7 +338,7 @@
 	})();
 	var scrollEvents = {
 		items: [],
-		add: function(o) {
+		add: function (o) {
 			this.items.push({
 				element: o.element,
 				triggerElement: (('triggerElement' in o && o.triggerElement) ? o.triggerElement : o.element),
@@ -350,7 +350,7 @@
 				state: false,
 			});
 		},
-		handler: function() {
+		handler: function () {
 			var height, top, bottom, scrollPad;
 			if (client.os == 'ios') {
 				height = document.documentElement.clientHeight;
@@ -363,7 +363,7 @@
 				bottom = top + height;
 				scrollPad = 0;
 			}
-			scrollEvents.items.forEach(function(item) {
+			scrollEvents.items.forEach(function (item) {
 				var bcr, elementTop, elementBottom, state, a, b;
 				if (!item.enter && !item.leave) return true;
 				if (!item.triggerElement) return true;
@@ -416,7 +416,7 @@
 				}
 			});
 		},
-		init: function() {
+		init: function () {
 			on('load', this.handler);
 			on('resize', this.handler);
 			on('scroll', this.handler);
@@ -427,264 +427,264 @@
 	var onvisible = {
 		effects: {
 			'blur-in': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'filter ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.opacity = 0;
 					this.style.filter = 'blur(' + (0.25 * intensity) + 'rem)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.filter = 'none';
 				},
 			},
 			'zoom-in': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transform = 'scale(' + (1 - ((alt ? 0.25 : 0.05) * intensity)) + ')';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'zoom-out': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transform = 'scale(' + (1 + ((alt ? 0.25 : 0.05) * intensity)) + ')';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'slide-left': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function() {
+				rewind: function () {
 					this.style.transform = 'translateX(100vw)';
 				},
-				play: function() {
+				play: function () {
 					this.style.transform = 'none';
 				},
 			},
 			'slide-right': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function() {
+				rewind: function () {
 					this.style.transform = 'translateX(-100vw)';
 				},
-				play: function() {
+				play: function () {
 					this.style.transform = 'none';
 				},
 			},
 			'flip-forward': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transformOrigin = '50% 50%';
 					this.style.transform = 'perspective(1000px) rotateX(' + ((alt ? 45 : 15) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'flip-backward': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transformOrigin = '50% 50%';
 					this.style.transform = 'perspective(1000px) rotateX(' + ((alt ? -45 : -15) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'flip-left': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transformOrigin = '50% 50%';
 					this.style.transform = 'perspective(1000px) rotateY(' + ((alt ? 45 : 15) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'flip-right': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transformOrigin = '50% 50%';
 					this.style.transform = 'perspective(1000px) rotateY(' + ((alt ? -45 : -15) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'tilt-left': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transform = 'rotate(' + ((alt ? 45 : 5) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'tilt-right': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity, alt) {
+				rewind: function (intensity, alt) {
 					this.style.opacity = 0;
 					this.style.transform = 'rotate(' + ((alt ? -45 : -5) * intensity) + 'deg)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'fade-right': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.opacity = 0;
 					this.style.transform = 'translateX(' + (-1.5 * intensity) + 'rem)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'fade-left': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.opacity = 0;
 					this.style.transform = 'translateX(' + (1.5 * intensity) + 'rem)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'fade-down': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.opacity = 0;
 					this.style.transform = 'translateY(' + (-1.5 * intensity) + 'rem)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'fade-up': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.opacity = 0;
 					this.style.transform = 'translateY(' + (1.5 * intensity) + 'rem)';
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 					this.style.transform = 'none';
 				},
 			},
 			'fade-in': {
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'opacity ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function() {
+				rewind: function () {
 					this.style.opacity = 0;
 				},
-				play: function() {
+				play: function () {
 					this.style.opacity = 1;
 				},
 			},
 			'fade-in-background': {
 				custom: true,
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					this.style.setProperty('--onvisible-speed', speed + 's');
 					if (delay) this.style.setProperty('--onvisible-delay', delay + 's');
 				},
-				rewind: function() {
+				rewind: function () {
 					this.style.removeProperty('--onvisible-background-color');
 				},
-				play: function() {
+				play: function () {
 					this.style.setProperty('--onvisible-background-color', 'rgba(0,0,0,0.001)');
 				},
 			},
 			'zoom-in-image': {
 				target: 'img',
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function() {
+				rewind: function () {
 					this.style.transform = 'scale(1)';
 				},
-				play: function(intensity) {
+				play: function (intensity) {
 					this.style.transform = 'scale(' + (1 + (0.1 * intensity)) + ')';
 				},
 			},
 			'zoom-out-image': {
 				target: 'img',
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.transform = 'scale(' + (1 + (0.1 * intensity)) + ')';
 				},
-				play: function() {
+				play: function () {
 					this.style.transform = 'none';
 				},
 			},
 			'focus-image': {
 				target: 'img',
-				transition: function(speed, delay) {
+				transition: function (speed, delay) {
 					return 'transform ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '') + ', ' + 'filter ' + speed + 's ease' + (delay ? ' ' + delay + 's' : '');
 				},
-				rewind: function(intensity) {
+				rewind: function (intensity) {
 					this.style.transform = 'scale(' + (1 + (0.05 * intensity)) + ')';
 					this.style.filter = 'blur(' + (0.25 * intensity) + 'rem)';
 				},
-				play: function(intensity) {
+				play: function (intensity) {
 					this.style.transform = 'none';
 					this.style.filter = 'none';
 				},
 			},
 		},
-		add: function(selector, settings) {
+		add: function (selector, settings) {
 			var style = settings.style in this.effects ? settings.style : 'fade',
 				speed = parseInt('speed' in settings ? settings.speed : 1000) / 1000,
 				intensity = ((parseInt('intensity' in settings ? settings.intensity : 5) / 10) * 1.75) + 0.25,
@@ -695,14 +695,14 @@
 				state = 'state' in settings ? settings.state : null,
 				effect = this.effects[style];
 			if ('CARRD_DISABLE_ANIMATION' in window) {
-				if (style == 'fade-in-background') $$(selector).forEach(function(e) {
+				if (style == 'fade-in-background') $$(selector).forEach(function (e) {
 					e.style.setProperty('--onvisible-background-color', 'rgba(0,0,0,0.001)');
 				});
 				return;
 			}
-			$$(selector).forEach(function(e) {
+			$$(selector).forEach(function (e) {
 				var children = (stagger !== false) ? e.querySelectorAll(':scope > li, :scope ul > li') : null,
-					enter = function(staggerDelay = 0) {
+					enter = function (staggerDelay = 0) {
 						var _this = this,
 							transitionOrig;
 						if (effect.target) _this = this.querySelector(effect.target);
@@ -712,12 +712,12 @@
 							_this.style.transition = effect.transition(speed, delay + staggerDelay);
 						} else effect.transition.apply(_this, [speed, delay + staggerDelay]);
 						effect.play.apply(_this, [intensity, !!children]);
-						if (!effect.custom) setTimeout(function() {
+						if (!effect.custom) setTimeout(function () {
 							_this.style.removeProperty('backface-visibility');
 							_this.style.transition = transitionOrig;
 						}, (speed + delay + staggerDelay) * 1000 * 2);
 					},
-					leave = function() {
+					leave = function () {
 						var _this = this,
 							transitionOrig;
 						if (effect.target) _this = this.querySelector(effect.target);
@@ -727,7 +727,7 @@
 							_this.style.transition = effect.transition(speed);
 						} else effect.transition.apply(_this, [speed]);
 						effect.rewind.apply(_this, [intensity, !!children]);
-						if (!effect.custom) setTimeout(function() {
+						if (!effect.custom) setTimeout(function () {
 							_this.style.removeProperty('backface-visibility');
 							_this.style.transition = transitionOrig;
 						}, speed * 1000 * 2);
@@ -735,7 +735,7 @@
 					targetElement, triggerElement;
 				if (effect.target) targetElement = e.querySelector(effect.target);
 				else targetElement = e;
-				if (children) children.forEach(function(targetElement) {
+				if (children) children.forEach(function (targetElement) {
 					effect.rewind.apply(targetElement, [intensity, true]);
 				});
 				else effect.rewind.apply(targetElement, [intensity]);
@@ -750,9 +750,9 @@
 					element: e,
 					triggerElement: triggerElement,
 					initialState: state,
-					enter: children ? function() {
+					enter: children ? function () {
 						var staggerDelay = 0,
-							childHandler = function(e) {
+							childHandler = function (e) {
 								enter.apply(e, [staggerDelay]);
 								staggerDelay += stagger;
 							},
@@ -766,7 +766,7 @@
 									a.reverse();
 									break;
 								case 'random':
-									a.sort(function() {
+									a.sort(function () {
 										return Math.random() - 0.5;
 									});
 									break;
@@ -774,8 +774,8 @@
 							a.forEach(childHandler);
 						}
 					} : enter,
-					leave: (replay ? (children ? function() {
-						children.forEach(function(e) {
+					leave: (replay ? (children ? function () {
+						children.forEach(function (e) {
 							leave.apply(e);
 						});
 					} : leave) : null),
