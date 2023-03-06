@@ -118,9 +118,9 @@ body a {
 }
 
 .icon-food-svg {
-	fill: none;
-	stroke: var(--btn-svg-color);
-	stroke-width: 3.5px;
+	fill: none !important;
+	stroke: var(--btn-svg-color) !important;
+	stroke-width: 4px !important;
 }
 
 /* Theme CSS */
