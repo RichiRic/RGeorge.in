@@ -117,13 +117,13 @@ body a {
 	min-width: 20px !important;
 }
 
-/*
-.profile-pic {
-	opacity: var(--profile-pic-opacity) !important;
-}*/
+.icon-food-svg {
+	fill: none;
+	stroke: var(--btn-svg-color);
+	stroke-width: 3.5px;
+}
 
-
-/*Theme CSS*/
+/* Theme CSS */
 html,
 body,
 div,
