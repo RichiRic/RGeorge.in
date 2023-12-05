@@ -1,4 +1,4 @@
-<script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+<script language="JavaScript" type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 //Check Current OS Theme and Implement Changes
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
