@@ -3,15 +3,15 @@ const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 let btnlbl = document.getElementById("modebtn-lbl");
 let btnsvg = document.getElementById("modebtn-svg");
 
-$(document).ready(function () {
-	if (prefersDarkScheme.matches) {
-		btnlbl.textContent = "light mode";
-		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
-	} else {
-		btnlbl.textContent = "dark mode";
-		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-moon');
-	}
-});
+// $(document).ready(function () {
+// 	if (prefersDarkScheme.matches) {
+// 		btnlbl.textContent = "light mode";
+// 		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-sun');
+// 	} else {
+// 		btnlbl.textContent = "dark mode";
+// 		btnsvg.setAttributeNS(SVG_XLINK, 'xlink:href', '#icon-moon');
+// 	}
+// });
 
 
 //Theme's Default JS//
