@@ -1,3 +1,5 @@
+<script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>
+
 //Check Current OS Theme and Implement Changes
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 let btnlbl = document.getElementById("modebtn-lbl");
